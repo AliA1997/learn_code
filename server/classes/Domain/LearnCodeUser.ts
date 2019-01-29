@@ -16,7 +16,7 @@ export default class LearnCodeUser {
     email: String
     @Field(type => String, {description: 'Intro for your LearnCodeUser class.'})
     intro: String
-    @Field(type => String, {description: 'Avatar of educator.'})
+    @Field(type => String, {description: 'Avatar of user..'})
     avatar: String
     @Field(type => String, {description: 'Push Notification Token for your LearnCodeUser class.'})
     pushNotificationToken: String

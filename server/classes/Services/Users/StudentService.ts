@@ -9,7 +9,7 @@ export default class StudentService implements IStudentService {
     repository: StudentRepository;
 
     getAllStudents() {
-        return this.repository.getStudents();
+        return this.repository.getAllStudents();
     }
 
     getStudent(id: Number) {

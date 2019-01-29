@@ -4,7 +4,7 @@ import Context from '../../context';
 export default interface IStudentRepository {
     context: Context;
 
-    getStudents(): Promise<Student[]>;
+    getAllStudents(): Promise<Student[]>;
     
     getStudent(id: Number): Promise<Student>;
 }

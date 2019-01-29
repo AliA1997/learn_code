@@ -13,7 +13,7 @@ export default class StudentRepository implements IStudentRepository {
 
     context: Context;
 
-    getStudents() {
+    getAllStudents() {
         return this.context.students().then(studentResult => {
             return studentResult.map(student => {
                 let studentToReturn = new Student(

@@ -15,6 +15,7 @@ export default class Student extends User {
             super();
             this.name = name;
             this.displayName = displayName;
+            this.avatar = avatar;
             this.email = email;
             this.intro = intro;
             this.pushNotificationToken = pushNotificationToken;

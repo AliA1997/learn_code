@@ -12,7 +12,7 @@ export default class TutorialRepository implements ITutorialRepository {
 
     context: Context;
 
-    getTutorials() {
+    getAllTutorials() {
         return this.context.tutorials().then(tutorialResult => {
             return tutorialResult.map(tutorial => {
                 const tutorialsToReturn = new Tutorial(

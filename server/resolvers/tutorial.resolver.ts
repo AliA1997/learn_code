@@ -11,7 +11,7 @@ export default class TutorialResolver {
     service: TutorialService;
 
     @Query(returns => [Tutorial])
-    async getTutorials() {
+    async getAllTutorials() {
         const tutorials = await this.service.getAllTutorials();
         return tutorials;
     } 

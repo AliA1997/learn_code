@@ -8,7 +8,7 @@ export default class TutorialService implements ITutorialService {
     repository: TutorialRepository
 
     getAllTutorials() {
-        return this.repository.getTutorials();
+        return this.repository.getAllTutorials();
     }
 
     getTutorial(id: Number) {

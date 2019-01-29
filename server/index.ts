@@ -1,25 +1,46 @@
 import "reflect-metadata";
 import * as dotenv from 'dotenv';
 import * as express from 'express';
+// import * as session from 'express-session';
+// import * as pgSession from 'connect-pg-simple';
 import * as massive from 'massive';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as path from 'path';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloEngine } from 'apollo-engine';
 import { buildSchema } from 'type-graphql';
 import EducatorResolver from './resolvers/educators.resolver';
 import ProgrammingLanguageResolver from './resolvers/plitems.resolver';
-import Context from './classes/Data/context';
-import PLService from './classes/Services/PLItems/PLService';
-import PLRepository from './classes/Data/Repositories/PLItems/PLRepository';
 import StudentResolver from './resolvers/students.resolver';
 import TutorialResolver from './resolvers/tutorial.resolver';
+
 
 dotenv.config();
 
 (async function init() {
+    const session = require('express-session');
+    const pgSession = require('connect-pg-simple')(session);
+    
+    //Define your session initialized.
+    const initializedSession = session({
+        store: session && new pgSession({
+            conString: process.env.CONNECTION_STRING
+        }),
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUnitialized: true,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 * 14
+        }
+    });
+
     //Schema created via resolvers.
     const schema = await buildSchema({
-        resolvers: [ProgrammingLanguageResolver , StudentResolver, EducatorResolver, TutorialResolver]
+        resolvers: [ProgrammingLanguageResolver , StudentResolver, EducatorResolver, TutorialResolver],
+        emitSchemaFile: path.resolve(__dirname, './resultSchema.gql')
     });
+
 
     const app = express();
 
@@ -31,20 +52,34 @@ dotenv.config();
     })
     .catch(err => console.log('Database Error--------', err));
 
+    app.use(bodyParser.json());
 
+    app.use('*', cors({ 
+        origin: ['http://172.27.32.45:8081', 'http://localhost:8081/graphql', 'http://172.27.32.45:8081/graphql', 'http://localhost:8081', 'http://10.0.2.2:8081/graphql', 'http://10.0.2.2:8081'],
+        methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
+        }));
+
+    app.use(initializedSession);
 
     const server = new ApolloServer({
         schema, 
         tracing: true,
-        cacheControl: true, 
+        cacheControl: true,
+        playground: true, 
         engine: false
     });
-
-    server.applyMiddleware({app});
 
 
     const port = 4000;
     const graphqlEndpoint = '/graphql';
+    
+    
+    server.applyMiddleware({app: app});
+
+    server.setGraphQLPath(graphqlEndpoint);
+
+    
+    // app.listen(3500, () => console.log(`Listening on port:3500`));
 
     const engine = new ApolloEngine({
         apiKey: process.env.ENGINE_API_KEY
@@ -54,8 +89,12 @@ dotenv.config();
     .listen({
         port,
         expressApp: app,
-        graphqlPaths: [graphqlEndpoint]
+        graphqlPaths: [graphqlEndpoint],
+        launcherOptions: {
+            startupTimeout: 3000
+        }
     },
     () => console.log(`Server listening on port:${port}.`)
-    )
+    );
+
 })();

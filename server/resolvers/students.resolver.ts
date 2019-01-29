@@ -15,7 +15,7 @@ export default class StudentResolver {
     accountService: AccountService;
 
     @Query(returns => [Student])
-    async getStudents() {
+    async getAllStudents() {
         const students = await this.service.getAllStudents();
         return students;
     }

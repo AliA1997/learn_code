@@ -4,7 +4,7 @@ import Tutorial from '../../../Domain/Tutorials/Tutorial';
 export default interface ITutorialRepository {
     context: Context;
     
-    getTutorials() : Promise<Tutorial[]>
+    getAllTutorials() : Promise<Tutorial[]>
 
     getTutorial(id: Number): Promise<Tutorial>
 }
