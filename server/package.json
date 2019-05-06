@@ -26,10 +26,12 @@
     "express": "4.16.4",
     "express-graphql": "^0.7.1",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.4.0",
     "massive": "5.7.2",
     "pg-promise": "8.5.4",
     "scrypt": "^6.0.3",
-    "type-graphql": "0.16.0"
+    "type-graphql": "0.16.0",
+    "typedi": "^0.8.0"
   },
   "devDependencies": {
     "electron-rebuild": "1.8.2",

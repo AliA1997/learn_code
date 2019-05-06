@@ -1,7 +1,9 @@
-import { Resolver, Query, Mutation, Arg, Int } from 'type-graphql';
+import { Resolver, Query, Mutation, Arg, Ctx, Int, Authorized } from 'type-graphql';
+import jwt from 'jsonwebtoken';
 import StudentService from '../classes/Services/Users/StudentService';
 import AccountService from '../classes/Services/Users/AccountService';
 import Student from '../classes/Domain/Users/Student';
+import LearnCodeUser from '../classes/Domain/LearnCodeUser';
 
 @Resolver(of => Student)
 export default class StudentResolver {
@@ -28,13 +30,5 @@ export default class StudentResolver {
         return studentToReturn;
     } 
 
-    @Mutation(returns => Student)
-    async loginStudent(@Arg("displayName", type => String) displayName: string, @Arg("password", type => String) password: string) {
-        const loggedInStudent: Student = await this.accountService.loginStudent(displayName, password)
-        if(!loggedInStudent) 
-            throw new Error('Display name and password not found');
-
-        return loggedInStudent;
-    }
 
 }

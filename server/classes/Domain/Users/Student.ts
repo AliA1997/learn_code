@@ -10,9 +10,9 @@ import User from '../../Domain/LearnCodeUser';
 @ObjectType({description: 'Student Object type for each individual student.'})
 export default class Student extends User {
     constructor(name: String, displayName: String, email: String, intro: String, avatar: String, pushNotificationToken: String,
-        occupation: String, education: Education, programmingExperience: Number, favoriteProgrammingLanguages: [ProgrammingLanguage],
-        role: String, favoriteTutorials: [FavoriteTutorial], subscriptionStatus: Subscription, password?: String, id?:Number) {
-            super();
+        occupation: String, education: Education, programmingExperience: Number, favoriteProgrammingLanguages: [ProgrammingLanguage] | any[],
+        role: String, favoriteTutorials: [FavoriteTutorial] | any[], subscriptionStatus: Subscription, password?: String, id?:Number) {
+            super(role, displayName, email, avatar, name, education, programmingExperience, '');
             this.name = name;
             this.displayName = displayName;
             this.avatar = avatar;
@@ -34,7 +34,6 @@ export default class Student extends User {
                 this.id = id;
             }
     }
-
     @Field(type => [FavoriteTutorial])
     favoriteTutorials: FavoriteTutorial[]
     @Field(type => Subscription)

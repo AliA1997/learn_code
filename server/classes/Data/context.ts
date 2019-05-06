@@ -7,16 +7,55 @@ import { postgresDatabase } from '../../connectors';
 import * as programmingLanguagesDbFiles from '../../connectors/dbImports/plDb';
 import * as educatorDbFiles from '../../connectors/dbImports/educatorDb';
 import * as studentDbFiles from '../../connectors/dbImports/studentDb';
+import * as userDbFiles from '../../connectors/dbImports/userDb';
 import * as tutorialDbFiles from '../../connectors/dbImports/tutorialDb';
+import LearnCodeUser from '../Domain/LearnCodeUser';
 
 export default class Context {
-    educators(){
-        return postgresDatabase.manyOrNone(educatorDbFiles.getEducators).then(res => {
-            return res;
-        });
+
+    user(userToRegister?: LearnCodeUser, thirdParty?: boolean, isStudent?: boolean): Promise<any> {
+        console.log('thirdParty----------', thirdParty);
+        console.log('isStudent--------------', isStudent);
+        console.log('userToRegister---------', userToRegister);
+
+        return postgresDatabase.manyOrNone(userDbFiles.register(thirdParty, isStudent), userToRegister)
+                .then(res => {
+                    console.log('res-------------', res);
+                    return res;
+                })
+                .catch(error => {
+                    return error;
+                })
     }
 
-    educator(id?: Number, displayName?: string) {
+    users(): Promise<any[]> {
+
+        return postgresDatabase.manyOrNone(userDbFiles.getUsers)
+        .then(res => {
+            return res;
+        })
+        .catch(error => {
+            return error;
+        })
+
+    }
+
+    educators(): Promise<any[]> {
+
+        return postgresDatabase.manyOrNone(educatorDbFiles.getEducators)
+                .then(res => {
+                    res => res.map(educator => {
+                        return educator;
+                    })
+                    return res;
+                })
+                .catch(error => {
+                    return error;
+                });
+
+    }
+
+    educator(id?: Number, displayName?: String): Promise<any> {
         if(id) 
             return postgresDatabase.manyOrNone(educatorDbFiles.getEducator, id).then(res => {
                 console.log('hit if statement--------');
@@ -28,13 +67,13 @@ export default class Context {
             });
     }
 
-    students() {
+    students(): Promise<any[]> {
         return postgresDatabase.manyOrNone(studentDbFiles.getStudents).then(res => {
             return res;
         });
     }
 
-    student(id?: Number, displayName?: string) {
+    student(id?: Number, displayName?: String): Promise<any> {
         if(id)
             return postgresDatabase.manyOrNone(studentDbFiles.getStudent, id).then(res => {
                 return res;
@@ -48,17 +87,17 @@ export default class Context {
     subscriptions() {
         
     }
-    programmingLanguages() {
+    programmingLanguages(): Promise<any[]> {
         return postgresDatabase.manyOrNone(programmingLanguagesDbFiles.getProgrammingLanguages);
     }
 
-    tutorials() {  
+    tutorials(): Promise<any[]> {  
         return postgresDatabase.manyOrNone(tutorialDbFiles.getTutorials).then(res => {
             return res;
         });
     }
 
-    tutorial(id: Number) {
+    tutorial(id: Number): Promise<any> {
         return postgresDatabase.manyOrNone(tutorialDbFiles.getTutorial, id).then(res => {
             return res;
         })

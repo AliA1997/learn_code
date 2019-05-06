@@ -16,6 +16,17 @@ BEGIN
 END;
 $educationToReturn$ LANGUAGE plpgsql;
 
+----Cast arguments to a Education type for register and inserting, and updating data.
+CREATE OR REPLACE FUNCTION castJsonbToEducation(email TEXT, institution TEXT, yearOfGraduation INTEGER, certificate TEXT) 
+RETURNS EDUCATION AS $educationToReturn$
+DECLARE 
+    educationToReturn EDUCATION;
+BEGIN
+    educationToReturn := ROW(email, certificate, institution, yearOfGraduation, certificate);
+    RETURN educationToReturn;
+END;
+$educationToReturn$ LANGUAGE plpgsql;
+
 ------------------------------------------------------------------------------------------------
 --Composite type definition
 CREATE TYPE FEE as (paymentId VARCHAR(50), amount INTEGER, type VARCHAR(30), description VARCHAR(250), billing BOOLEAN);
@@ -37,6 +48,8 @@ BEGIN
 END;
 $feeToReturn$ LANGUAGE plpgsql;
 
+
+------------------------------------------------------------------------------------------------------
 
 -- Will map over the stripePaymentArg fees and use your castFee function to cast each fee to a jsonb object.
 CREATE OR REPLACE FUNCTION returnFees(feesArg FEE[])

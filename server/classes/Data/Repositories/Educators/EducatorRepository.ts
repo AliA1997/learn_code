@@ -4,6 +4,7 @@ import ProgrammingLanguage from '../../../Domain/ProgrammingLanguages/PLItem';
 import Context from '../../context';
 import IEducatorRepository from './IEducatorRepository';
 import { json } from 'body-parser';
+import LearnCodeUser from '../../../Domain/LearnCodeUser';
 
 export default class EducatorRepository implements IEducatorRepository {
     constructor() {
@@ -41,4 +42,5 @@ export default class EducatorRepository implements IEducatorRepository {
             return educatorToReturn;;
         });
     }
+
 }

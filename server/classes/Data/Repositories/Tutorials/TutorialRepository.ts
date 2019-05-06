@@ -4,6 +4,8 @@ import Criticism from '../../../Domain/Tutorials/Criticism';
 import TagItem from '../../../Domain/Tutorials/TagItem';
 import Tutorial from '../../../Domain/Tutorials/Tutorial';
 import Author from '../../../Domain/Tutorials/Author';
+import { Service } from 'typedi';
+
 
 export default class TutorialRepository implements ITutorialRepository {
     constructor() {

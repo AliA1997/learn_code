@@ -9,11 +9,16 @@ import * as cors from 'cors';
 import * as path from 'path';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloEngine } from 'apollo-engine';
-import { buildSchema } from 'type-graphql';
+import { buildSchema, AuthChecker } from 'type-graphql';
+import { postgresDatabase } from './connectors/index';
 import EducatorResolver from './resolvers/educators.resolver';
 import ProgrammingLanguageResolver from './resolvers/plitems.resolver';
 import StudentResolver from './resolvers/students.resolver';
 import TutorialResolver from './resolvers/tutorial.resolver';
+import UserResolver from './resolvers/user.resolver';
+//Middlewares
+import { AuthContext } from './middlewares/auth.context';
+import { authChecker } from './middlewares/authChecker';
 
 
 dotenv.config();
@@ -29,7 +34,7 @@ dotenv.config();
         }),
         secret: process.env.SESSION_SECRET,
         resave: false,
-        saveUnitialized: true,
+        saveUninitialized: true,
         cookie: {
             maxAge: 1000 * 60 * 60 * 24 * 14
         }
@@ -37,7 +42,10 @@ dotenv.config();
 
     //Schema created via resolvers.
     const schema = await buildSchema({
-        resolvers: [ProgrammingLanguageResolver , StudentResolver, EducatorResolver, TutorialResolver],
+        //No authorization erorr messages.
+        authMode: 'null',
+        resolvers: [ProgrammingLanguageResolver , StudentResolver, EducatorResolver, TutorialResolver, UserResolver],
+        authChecker: authChecker,
         emitSchemaFile: path.resolve(__dirname, './resultSchema.gql')
     });
 
@@ -56,13 +64,22 @@ dotenv.config();
 
     app.use('*', cors({ 
         origin: ['http://172.27.32.45:8081', 'http://localhost:8081/graphql', 'http://172.27.32.45:8081/graphql', 'http://localhost:8081', 'http://10.0.2.2:8081/graphql', 'http://10.0.2.2:8081'],
-        methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']
         }));
 
     app.use(initializedSession);
 
     const server = new ApolloServer({
         schema, 
+        context: (req, res) => {
+            const ctx: AuthContext = {
+              // create mocked user in context
+              // in real app you would be mapping user from `req.user` or sth
+              user: req.user
+            };
+            return {
+                user: ctx.user
+            }
+        },
         tracing: true,
         cacheControl: true,
         playground: true, 

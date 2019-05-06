@@ -11,6 +11,7 @@ SELECT
     ,castEducation(education) AS education
     ,programmingExperience
     ,returnPlItems(favoriteprogramminglanguages) AS favoriteProgrammingLanguages
+    ,returnFavoriteTutorials(favoritetutorials) as favoriteTutorials
     ,role
-    ,returnPlItems(languagesOfExpertise) AS languagesOfExpertise
+    ,returnsubscription(subscription) AS subscription
 FROM students WHERE displayName = $1 OR email = $1;

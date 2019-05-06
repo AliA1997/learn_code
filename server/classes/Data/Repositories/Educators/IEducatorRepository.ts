@@ -8,4 +8,5 @@ export default interface IEducatorRepository {
     getAllEducator(): Promise<Educator[]>
     //When dealing with promises from a database call have your return type of Promise with a generic type of a Educator type.
     getEducator(id: Number): Promise<Educator>
+
 }

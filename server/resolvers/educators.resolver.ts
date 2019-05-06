@@ -28,13 +28,4 @@ export default class EducatorResolver {
         return educatorToReturn;
     }
 
-    
-    @Mutation(returns => Educator)
-    async loginEducator(@Arg("displayName", type => String) displayName: string, @Arg("password", type => String) password: string) {
-        const loggedInEducator: Educator = await this.accountService.loginEducator(displayName, password)
-        if(!loggedInEducator) 
-            throw new Error('Display name and password not found');
-
-        return loggedInEducator;
-    }
 }

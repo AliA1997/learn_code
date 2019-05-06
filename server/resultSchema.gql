@@ -65,6 +65,9 @@ type Educator {
   # User's location
   password: String!
 
+  # Jwt Token for user.
+  jwtToken: String!
+
   # Languages of expertise.
   languagesOfExpertise: [PLItem!]!
 }
@@ -114,11 +117,15 @@ type LearnCodeUser {
 
   # User's location
   password: String!
+
+  # Jwt Token for user.
+  jwtToken: String!
 }
 
 type Mutation {
-  loginEducator(password: String!, displayName: String!): Educator!
   loginStudent(password: String!, displayName: String!): Student!
+  loginEducator(password: String!, displayName: String!): Educator!
+  register(eduCertificate: String, eduYearOfGraduation: Int, eduInstitution: String, experience: Int, password: String, avatar: String!, email: String!, displayName: String!, role: String!, isThirdParty: Boolean): LearnCodeUser!
 }
 
 # PLITem object type.
@@ -169,6 +176,9 @@ type Student {
 
   # User's location
   password: String!
+
+  # Jwt Token for user.
+  jwtToken: String!
   favoriteTutorials: [FavoriteTutorial!]!
   subscription: SubscriptionStatus!
 }

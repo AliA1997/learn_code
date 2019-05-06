@@ -15,11 +15,9 @@ export default class PasswordHasher {
     salt: Number;
 
     hashedPassword(password: string){
-        console.log(this.options);
-        console.log(this.salt);
-        console.log(password);
-        console.log(64);
-        const hashedPassword: string = bcrypt.hash(password, this.salt).then(result => console.log(result)).catch(err => console.log(err));
+        const hashedPassword: string = bcrypt.hash(password, this.salt)
+                                        .then(result => console.log(result))
+                                        .catch(err => console.log(err));
         console.log("hashedPassword--------", hashedPassword);
         return hashedPassword;
     }
